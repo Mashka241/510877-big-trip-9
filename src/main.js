@@ -6,7 +6,7 @@ import {createSortTemplate} from './components/sort';
 import {createTripDayTemplate} from './components/trip-day';
 import {createEventsListTemplate} from './components/events-list';
 
-const EVENT_COUNT = 3;
+import {tripDays} from './data/data';
 
 const siteMainElement = document.querySelector(`.page-main`);
 const siteHeaderElement = document.querySelector(`.page-header`);
@@ -27,6 +27,6 @@ render(tripEvents, createEventsListTemplate(), `beforeend`);
 
 const eventsList = document.querySelector(`.trip-days`);
 
-for (let i = 0; i < EVENT_COUNT; i++) {
-  render(eventsList, createTripDayTemplate(), `beforeend`);
+for (let tripDay of tripDays) {
+  render(eventsList, createTripDayTemplate(tripDay), `beforeend`);
 }
