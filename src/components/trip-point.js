@@ -1,4 +1,4 @@
-export const createTripPointTemplate = ({type, city, photo, description, schedule, price, options}) => {
+export const createTripPointTemplate = ({type, city, schedule, price}) => {
   return `<li class="trip-events__item">
     <div class="event">
       <div class="event__type">
