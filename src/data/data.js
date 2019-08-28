@@ -87,11 +87,11 @@ const getTripPoint = () => ({
 //   return {...it};
 // });
 
-const tripDays = new Array(randomInteger(1, 4)).fill().
-map((it, index) => ({
-  day: index + 1,
-  date: Date.now()
-}));
+// const tripDays = new Array(randomInteger(1, 4)).fill().
+// map((it, index) => ({
+//   day: index + 1,
+//   date: Date.now()
+// }));
 
 const filters = [
   {
@@ -108,4 +108,4 @@ const filters = [
   }
 ];
 
-export {tripDays, getTripPoint, filters};
+export {getTripPoint, filters};
