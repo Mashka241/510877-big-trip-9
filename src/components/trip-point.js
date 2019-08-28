@@ -1,22 +1,41 @@
-export const createTripPointTemplate = ({type, city, schedule, price}) => {
-  return `<li class="trip-events__item">
+import {createElement} from './../utils';
+
+export default class TripPoint {
+  constructor({type, city, schedule, price}) {
+    this._type = type;
+    this._city = city;
+    this._schedule = schedule;
+    this._price = price;
+    this._element = null;
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  getTemplate() {
+    return `<li class="trip-events__item">
     <div class="event">
       <div class="event__type">
-        <img class="event__type-icon" width="42" height="42" src="img/icons/${type.drive.img}" alt="Event type icon">
+        <img class="event__type-icon" width="42" height="42" src="img/icons/${this._type.drive.img}" alt="Event type icon">
       </div>
-      <h3 class="event__title">${type.drive.title} ${city}</h3>
+      <h3 class="event__title">${this._type.drive.title} ${this._city}</h3>
 
       <div class="event__schedule">
         <p class="event__time">
-          <time class="event__start-time" datetime="2019-03-18T10:30">${new Date(schedule.start).getHours()}:${new Date(schedule.start).getMinutes()}</time>
+          <time class="event__start-time" datetime="2019-03-18T10:30">${new Date(this._schedule.start).getHours()}:${new Date(this._schedule.start).getMinutes()}</time>
           &mdash;
-          <time class="event__end-time" datetime="2019-03-18T11:00">${new Date(schedule.end).getHours()}:${new Date(schedule.end).getMinutes()}</time>
+          <time class="event__end-time" datetime="2019-03-18T11:00">${new Date(this._schedule.end).getHours()}:${new Date(this._schedule.end).getMinutes()}</time>
         </p>
-        <p class="event__duration">${schedule.duration.hours}H ${schedule.duration.minutes}M</p>
+        <p class="event__duration">${this._schedule.duration.hours}H ${this._schedule.duration.minutes}M</p>
       </div>
 
       <p class="event__price">
-        &euro;&nbsp;<span class="event__price-value">${price}</span>
+        &euro;&nbsp;<span class="event__price-value">${this._price}</span>
       </p>
 
       <h4 class="visually-hidden">Offers:</h4>
@@ -33,4 +52,10 @@ export const createTripPointTemplate = ({type, city, schedule, price}) => {
       </button>
     </div>
   </li>`;
-};
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
+
