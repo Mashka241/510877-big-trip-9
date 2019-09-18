@@ -1,15 +1,8 @@
 import {createSiteMenuTemplate} from './components/site-menu';
 import {createFiltersTemplate} from './components/filters';
 import {createRouteInfoTemplate} from './components/route-info';
-import {createSortTemplate} from './components/sort';
-import {createTripDayTemplate} from './components/trip-day';
-import {createEventsListTemplate} from './components/events-list';
-
 import {getTripPoint} from './data/data';
-import TripPoint from './components/trip-point';
-import TripPointEdit from './components/trip-point-edit';
-
-import {render as renderElement} from './utils';
+import TripController from './controllers/trip-controller';
 
 const TASK_COUNT = 3;
 const siteMainElement = document.querySelector(`.page-main`);
@@ -25,46 +18,8 @@ const render = (container, template, place) => {
 render(tripControls, createSiteMenuTemplate(), `afterbegin`);
 render(tripControls, createFiltersTemplate(), `beforeend`);
 render(tripInfo, createRouteInfoTemplate(), `afterbegin`);
-render(tripEvents, createSortTemplate(), `afterbegin`);
 
-if (TASK_COUNT > 0) {
-  render(tripEvents, createEventsListTemplate(), `beforeend`);
+const tripPointMocks = new Array(TASK_COUNT).fill(``).map(getTripPoint);
 
-  const eventsList = document.querySelector(`.trip-days`);
-
-  render(eventsList, createTripDayTemplate(), `beforeend`);
-
-  const tripPointList = document.querySelector(`.trip-events__list`);
-
-  const renderTripPoint = (tripPointMock) => {
-    const tripPoint = new TripPoint(tripPointMock);
-    const tripPointEdit = new TripPointEdit(tripPointMock);
-
-    const onEscKeyDown = (evt) => {
-      if (evt.key === `Escape` || evt.key === `Esc`) {
-        tripPointList.replaceChild(tripPoint.getElement(), tripPointEdit.getElement());
-        document.removeEventListener(`keydown`, onEscKeyDown);
-      }
-    };
-
-    const onTripPointEditSubmit = (evt) => {
-      evt.preventDefault();
-      tripPointList.replaceChild(tripPoint.getElement(), tripPointEdit.getElement());
-      document.removeEventListener(`keydown`, onEscKeyDown);
-    };
-
-    tripPoint.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, () => {
-      tripPointList.replaceChild(tripPointEdit.getElement(), tripPoint.getElement());
-      tripPointEdit.getElement().addEventListener(`submit`, onTripPointEditSubmit);
-      document.addEventListener(`keydown`, onEscKeyDown);
-    });
-
-    renderElement(tripPointList, tripPoint.getElement(), `beforeend`);
-  };
-
-  const tripPointMocks = new Array(TASK_COUNT).fill(``).map(getTripPoint);
-
-  tripPointMocks.forEach((tripPointMock) => renderTripPoint(tripPointMock));
-} else {
-  render(tripEvents, `<p class="trip-events__msg">Click New Event to create your first point</p>`, `beforeend`);
-}
+const tripController = new TripController(tripEvents, tripPointMocks);
+tripController.init();
