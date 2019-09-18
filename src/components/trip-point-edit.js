@@ -1,16 +1,10 @@
-import {createElement} from './../utils';
+// import {createElement} from './../utils';
+import AbstractComponent from './../components/abstract-component';
 
-export default class TripPointEdit {
+export default class TripPointEdit extends AbstractComponent {
   constructor() {
+    super();
     this._element = null;
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
   }
 
   getTemplate() {
@@ -200,11 +194,6 @@ export default class TripPointEdit {
         </div>
       </section>
     </section>
-  </form>`;
-  }
-
-
-  removeElement() {
-    this._element = null;
+  </form>`.trim();
   }
 }

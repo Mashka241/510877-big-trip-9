@@ -9,7 +9,6 @@ const createElement = (template) => {
   return newElement.firstChild;
 };
 
-// Рендер и анрендер для компонент
 const render = (container, element, place) => {
   switch (place) {
     case Position.AFTERBEGIN:
