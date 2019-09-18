@@ -1,7 +1,7 @@
 
 import TripDaysBoard from './../components/trip-days-board';
 import Sort from './../components/sort';
-import EventsList from './../components/events-list'
+import EventsList from './../components/events-list';
 import TripPoint from './../components/trip-point';
 import TripPointEdit from './../components/trip-point-edit';
 import {render} from './../utils';
