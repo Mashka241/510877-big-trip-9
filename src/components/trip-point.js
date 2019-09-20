@@ -1,11 +1,12 @@
 import AbstractComponent from './../components/abstract-component';
-
+import moment from 'moment';
 export default class TripPoint extends AbstractComponent {
-  constructor({type, city, schedule, price}) {
+  constructor({type, city, dateFrom, dateTo, price}) {
     super();
     this._type = type;
     this._city = city;
-    this._schedule = schedule;
+    this._dateFrom = dateFrom;
+    this._dateTo = dateTo;
     this._price = price;
   }
 
@@ -20,11 +21,11 @@ export default class TripPoint extends AbstractComponent {
 
           <div class="event__schedule">
             <p class="event__time">
-              <time class="event__start-time" datetime="2019-03-18T10:30">${new Date(this._schedule.start).getHours()}:${new Date(this._schedule.start).getMinutes()}</time>
+              <time class="event__start-time" datetime="${moment(this._dateFrom).toISOString()}">${moment(this._dateFrom).format(`HH:mm`)}</time>
               &mdash;
-              <time class="event__end-time" datetime="2019-03-18T11:00">${new Date(this._schedule.end).getHours()}:${new Date(this._schedule.end).getMinutes()}</time>
+              <time class="event__end-time" datetime="2019-03-18T11:00">${this._dateTo}</time>
             </p>
-            <p class="event__duration">${this._schedule.duration.hours}H ${this._schedule.duration.minutes}M</p>
+            <p class="event__duration">${1}H ${2}M</p>
           </div>
 
           <p class="event__price">
