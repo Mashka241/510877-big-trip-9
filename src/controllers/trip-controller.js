@@ -1,10 +1,8 @@
-
 import TripDaysBoard from './../components/trip-days-board';
 import Sort from './../components/sort';
 import EventsList from './../components/events-list';
-import TripPoint from './../components/trip-point';
-import TripPointEdit from './../components/trip-point-edit';
-import {render} from './../utils';
+import PointController from './point-controller';
+import {render, unrender} from './../utils';
 
 export default class TripController {
   constructor(container, tripPoints) {
@@ -13,6 +11,9 @@ export default class TripController {
     this._sort = new Sort();
     this._tripDaysBoard = new TripDaysBoard();
     this._eventsList = new EventsList();
+    this._subscriptions = [];
+    this._onChangeView = this._onChangeView.bind(this);
+    this._onDataChange = this._onDataChange.bind(this);
   }
 
   init() {
@@ -23,29 +24,24 @@ export default class TripController {
     this._tripPoints.forEach((tripPointMock) => this._renderTripPoint(tripPointMock));
   }
 
+  _renderEventsList() {
+    unrender(this._eventsList.getElement());
+    this._eventsList.removeElement();
+    render(this._tripDaysBoard.getElement(), this._eventsList.getElement(), `beforeend`);
+    this._tripPoints.forEach((tripPointMock) => this._renderTripPoint(tripPointMock));
+  }
+
   _renderTripPoint(tripPointMock) {
-    const tripPoint = new TripPoint(tripPointMock);
-    const tripPointEdit = new TripPointEdit(tripPointMock);
+    const tripPoint = new PointController(this._eventsList, tripPointMock, this._onDataChange, this._onChangeView);
+    this._subscriptions.push(tripPoint.setDefaultView.bind(tripPoint));
+  }
 
-    const onEscKeyDown = (evt) => {
-      if (evt.key === `Escape` || evt.key === `Esc`) {
-        this._eventsList.getElement().replaceChild(tripPoint.getElement(), tripPointEdit.getElement());
-        document.removeEventListener(`keydown`, onEscKeyDown);
-      }
-    };
+  _onChangeView() {
+    this._subscriptions.forEach((it) => it());
+  }
 
-    const onTripPointEditSubmit = (evt) => {
-      evt.preventDefault();
-      this._eventsList.getElement().replaceChild(tripPoint.getElement(), tripPointEdit.getElement());
-      document.removeEventListener(`keydown`, onEscKeyDown);
-    };
-
-    tripPoint.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, () => {
-      this._eventsList.getElement().replaceChild(tripPointEdit.getElement(), tripPoint.getElement());
-      tripPointEdit.getElement().addEventListener(`submit`, onTripPointEditSubmit);
-      document.addEventListener(`keydown`, onEscKeyDown);
-    });
-
-    render(this._eventsList.getElement(), tripPoint.getElement(), `beforeend`);
+  _onDataChange(newData, oldData) {
+    this._tripPoints[this._tripPoints.findIndex((it) => it === oldData)] = newData;
+    this._renderEventsList();
   }
 }

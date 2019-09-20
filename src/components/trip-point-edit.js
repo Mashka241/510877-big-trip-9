@@ -2,8 +2,10 @@
 import AbstractComponent from './../components/abstract-component';
 
 export default class TripPointEdit extends AbstractComponent {
-  constructor() {
+  constructor({type, price}) {
     super();
+    this._type = type;
+    this._price = price;
     this._element = null;
   }
 
@@ -107,7 +109,7 @@ export default class TripPointEdit extends AbstractComponent {
           <span class="visually-hidden">Price</span>
           &euro;
         </label>
-        <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="160">
+        <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${this._price}">
       </div>
 
       <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
