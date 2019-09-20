@@ -32,17 +32,8 @@ const getTripPoint = () => ({
     const descArray = MOCK_DESCRIPTION.split(`.`);
     return new Array(randomInteger(1, 3)).fill(descArray[randomInteger(0, descArray.length)]).join(`.`);
   },
-  schedule: {
-    start: Date.now(),
-    duration: {
-      days: 0,
-      hours: randomInteger(0, 24),
-      minutes: randomInteger(0, 60)
-    },
-    get end() {
-      return this.start + (this.duration.hours * 60 * 60 * 1000 + this.duration.minutes * 60 * 1000);
-    }
-  },
+  dateFrom: Date.now(),
+  dateTo: Date.now(),
   get price() {
     return randomInteger(1, 200);
   },

@@ -42,23 +42,12 @@ export default class PointController {
       const entry = {
         price: formData.get(`event-price`),
         type: formData.get(`event-type`),
-        schedule: {
-          start: Date.now(),
-          duration: {
-            days: 0,
-            hours: 5,
-            minutes: 40
-          },
-          get end() {
-            return this.start + (this.duration.hours * 60 * 60 * 1000 + this.duration.minutes * 60 * 1000);
-          }
-        },
         // destination: {
         //   name: formData.get(`event-destination`),
         // },
         // isFavourite: formData.get(`event-favorite`),
-        // dateFrom: formData.get(`event-start-time`),
-        // dateTo: formData.get(`event-end-time`),
+        dateFrom: formData.get(`event-start-time`),
+        dateTo: formData.get(`event-end-time`),
       };
 
       this._onDataChange(entry, this._tripPoint);
