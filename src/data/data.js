@@ -6,24 +6,14 @@ const randomInteger = (min, max) => {
 };
 
 const getTripPoint = () => ({
-  type: {
-    bus: {
-      title: `Bus to`,
-      img: `bus.png`
-    },
-    checkin: {
-      title: ``,
-      img: `check-in.png`
-    },
-    drive: {
-      title: `Drive to`,
-      img: `drive.png`
-    },
-    flight: {
-      title: `Flight to`,
-      img: `flight.png`
-    }
-  },
+  type: [
+    `taxi`,
+    `bus`,
+    `train`,
+    `flight`,
+    `check-in`,
+    `sightseeing`
+  ][Math.floor(Math.random() * 6)],
   city: [
     `Geneva`,
     `Amsterdam`,
