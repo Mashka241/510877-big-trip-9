@@ -61,6 +61,10 @@ export default class PointController {
       document.addEventListener(`keydown`, onEscKeyDown);
     });
 
+    this._tripPointEdit.getElement().querySelector(`.event__reset-btn`).addEventListener(`click`, () => {
+      this._onDataChange(null, this._tripPoint);
+    });
+
     render(this._container.getElement(), this._tripPoint.getElement(), `beforeend`);
   }
 
