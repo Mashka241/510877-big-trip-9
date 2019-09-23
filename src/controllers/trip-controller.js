@@ -24,6 +24,14 @@ export default class TripController {
     this._tripPoints.forEach((tripPointMock) => this._renderTripPoint(tripPointMock));
   }
 
+  hide() {
+    this._tripDaysBoard.getElement().classList.add(`visually-hidden`);
+  }
+
+  show() {
+    this._tripDaysBoard.getElement().classList.remove(`visually-hidden`);
+  }
+
   _renderEventsList() {
     unrender(this._eventsList.getElement());
     this._eventsList.removeElement();
@@ -41,7 +49,13 @@ export default class TripController {
   }
 
   _onDataChange(newData, oldData) {
-    this._tripPoints[this._tripPoints.findIndex((it) => it === oldData)] = newData;
+    const index = this._tripPoints.findIndex((it) => it === oldData);
+    if (newData === null) {
+      this._tripPoints = [...this._tripPoints.slice(0, index), ...this._tripPoints.slice(index + 1)];
+    } else {
+      this._tripPoints[index] = newData;
+    }
+
     this._renderEventsList();
   }
 }
