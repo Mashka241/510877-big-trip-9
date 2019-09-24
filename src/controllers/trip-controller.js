@@ -1,6 +1,7 @@
 import TripDaysBoard from './../components/trip-days-board';
 import Sort from './../components/sort';
 import EventsList from './../components/events-list';
+import NoEventsMessage from './../components/no-event';
 import PointController from './point-controller';
 import {render, unrender} from './../utils';
 
@@ -11,17 +12,23 @@ export default class TripController {
     this._sort = new Sort();
     this._tripDaysBoard = new TripDaysBoard();
     this._eventsList = new EventsList();
+    this._noEventMessage = new NoEventsMessage();
     this._subscriptions = [];
     this._onChangeView = this._onChangeView.bind(this);
     this._onDataChange = this._onDataChange.bind(this);
   }
 
   init() {
-    render(this._container, this._sort.getElement(), `beforeend`);
-    render(this._container, this._tripDaysBoard.getElement(), `beforeend`);
-    render(this._tripDaysBoard.getElement(), this._eventsList.getElement(), `beforeend`);
+    if (this._tripPoints.length) {
+      render(this._container, this._sort.getElement(), `beforeend`);
+      this._tripDaysBoard.setDays(this._tripPoints);
+      render(this._container, this._tripDaysBoard.getElement(), `beforeend`);
+      render(this._tripDaysBoard.getElement(), this._eventsList.getElement(), `beforeend`);
 
-    this._tripPoints.forEach((tripPointMock) => this._renderTripPoint(tripPointMock));
+      this._tripPoints.forEach((tripPointMock) => this._renderTripPoint(tripPointMock));
+    } else {
+      render(this._container, this._noEventMessage.getElement(), `beforeend`);
+    }
   }
 
   hide() {

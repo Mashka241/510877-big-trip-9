@@ -74,19 +74,21 @@ const getTripPoint = () => ({
 //   date: Date.now()
 // }));
 
-const filters = [
-  {
-    id: `everything`,
-    checked: true,
-  },
-  {
-    id: `future`,
-    checked: false,
-  },
-  {
-    id: `past`,
-    checked: false,
-  }
-];
+// const filters = [
+//   {
+//     id: `everything`,
+//     checked: true,
+//   },
+//   {
+//     id: `future`,
+//     checked: false,
+//   },
+//   {
+//     id: `past`,
+//     checked: false,
+//   }
+// ];
 
-export {getTripPoint, filters};
+const filtersData = [`everything`, `future`, `past`];
+
+export {getTripPoint, filtersData};
