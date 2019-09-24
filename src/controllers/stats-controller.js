@@ -1,6 +1,6 @@
 import Statistics from './../components/statistics';
-import Chart from 'chart.js';
-import ChartDataLabels from 'chartjs-plugin-datalabels';
+// import Chart from 'chart.js';
+// import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 export default class StatController {
   constructor(container) {
