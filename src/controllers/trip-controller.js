@@ -42,8 +42,8 @@ export default class TripController {
   _renderEventsList() {
     unrender(this._eventsList.getElement());
     this._eventsList.removeElement();
-    render(this._tripDaysBoard.getElement(), this._eventsList.getElement(), `beforeend`);
-    this._tripPoints.forEach((tripPointMock) => this._renderTripPoint(tripPointMock));
+    // render(this._tripDaysBoard.getElement(), this._eventsList.getElement(), `beforeend`);
+    // this._tripPoints.forEach((tripPointMock) => this._renderTripPoint(tripPointMock));
   }
 
   _renderTripPoint(tripPointMock) {
@@ -62,7 +62,6 @@ export default class TripController {
     } else {
       this._tripPoints[index] = newData;
     }
-
     this._renderEventsList();
   }
 }

@@ -4,27 +4,39 @@ import 'flatpickr/dist/themes/light.css';
 
 import TripPoint from './../components/trip-point';
 import TripPointEdit from './../components/trip-point-edit';
-import {render} from './../utils';
+import {render, parseImages, parseOffers} from './../utils';
+import moment from 'moment';
 
 export default class PointController {
-  constructor(container, tripPoint, onDataChange, onChangeView) {
+  constructor(container, tripPointData, onDataChange, onChangeView) {
     this._container = container;
-    this._tripPoint = tripPoint;
+    this._tripPointData = tripPointData;
     this._onDataChange = onDataChange;
     this._onChangeView = onChangeView;
-    this._tripPoint = new TripPoint(tripPoint);
-    this._tripPointEdit = new TripPointEdit(tripPoint);
+    this._tripPoint = new TripPoint(tripPointData);
+    this._tripPointEdit = new TripPointEdit(tripPointData);
 
     this.init();
   }
 
   init() {
-    flatpickr(this._tripPointEdit.getElement().querySelector(`.event__input--time`), {
+    flatpickr(this._tripPointEdit.getElement().querySelector(`input[name="event-start-time"]`), {
       altInput: false,
       dateFormat: `m/d/y, H:i`,
       [`time_24hr`]: true,
       allowInput: true,
       enableTime: true,
+      defaultDate: this._tripPoint.timeStart
+    });
+
+    flatpickr(this._tripPointEdit.getElement().querySelector(`input[name="event-end-time"]`), {
+      altInput: false,
+      dateFormat: `m/d/y, H:i`,
+      [`time_24hr`]: true,
+      allowInput: true,
+      enableTime: true,
+      defaultDate: this._tripPoint.timeStart + this._tripPoint.duration,
+      minDate: this._tripPoint.timeStart
     });
 
     const onEscKeyDown = (evt) => {
@@ -36,21 +48,22 @@ export default class PointController {
 
     const onTripPointEditSubmit = (evt) => {
       evt.preventDefault();
-      // this._container.getElement().replaceChild(this._tripPoint.getElement(), this._tripPointEdit.getElement());
-      const formData = new FormData(this._tripPointEdit.getElement());
+      const formData = new FormData(this._tripPointEdit.getElement().querySelector(`form.event--edit`));
 
       const entry = {
+        id: this._tripPointData.id,
         price: formData.get(`event-price`),
         type: formData.get(`event-type`),
-        // destination: {
-        //   name: formData.get(`event-destination`),
-        // },
-        // isFavourite: formData.get(`event-favorite`),
-        dateFrom: formData.get(`event-start-time`),
-        dateTo: formData.get(`event-end-time`),
+        city: formData.get(`event-destination`),
+        isFavourite: !!formData.get(`event-favorite`),
+        timeStart: formData.get(`event-start-time`),
+        duration: moment(formData.get(`event-end-time`), `MM/DD/YY, HH:mm`).valueOf() - moment(formData.get(`event-start-time`), `MM/DD/YY, HH:mm`).valueOf(),
+        imagesUrls: parseImages(this._tripPointEdit.getElement().querySelectorAll(`img.event__photo`)),
+        offers: parseOffers(this._tripPointEdit.getElement().querySelectorAll(`.event__offer-label`)),
+        description: this._tripPointEdit.getElement().querySelector(`.event__destination-description`).innerText,
       };
 
-      this._onDataChange(entry, this._tripPoint);
+      this._onDataChange(entry, this._tripPointData);
       document.removeEventListener(`keydown`, onEscKeyDown);
     };
 

@@ -21,6 +21,10 @@ const getFormattedDuration = (duration) => {
   return formattedDuration;
 };
 
+const getFirstCapital = (str) => {
+  return str ? str[0].toUpperCase() + str.slice(1) : ``;
+};
+
 const splitEventsByDay = (events) => {
   const temp = {};
   const getDateFromStamp = (timeStamp) => new Date(timeStamp).getDate().toString();
@@ -62,4 +66,23 @@ const unrender = (element) => {
   }
 };
 
-export {Position, getFormattedDuration, splitEventsByDay, createElement, render, unrender};
+const parseOffers = (offersInputLabels) => {
+  return [...offersInputLabels].map((it) => {
+    return {
+      title: it.firstElementChild.textContent,
+      price: parseInt(it.lastElementChild.textContent, 10),
+      accepted: it.control.checked
+    };
+  });
+};
+
+const parseImages = (imageElements) => {
+  return [...imageElements].map((it) => {
+    return {
+      src: it.src,
+      description: it.alt
+    };
+  });
+};
+
+export {Position, getFormattedDuration, getFirstCapital, splitEventsByDay, createElement, render, unrender, parseImages, parseOffers};

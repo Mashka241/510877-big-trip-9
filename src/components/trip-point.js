@@ -1,13 +1,18 @@
 import AbstractComponent from './../components/abstract-component';
+import {TRANSFER_TYPES} from './../main';
+import {getFormattedDuration, getFirstCapital} from './../utils';
 import moment from 'moment';
+
 export default class TripPoint extends AbstractComponent {
-  constructor({type, city, dateFrom, dateTo, price}) {
+  constructor({id, type, city, timeStart, duration, price, offers}) {
     super();
+    this._id = id;
     this._type = type;
     this._city = city;
-    this._dateFrom = dateFrom;
-    this._dateTo = dateTo;
+    this._timeStart = timeStart;
+    this._duration = duration;
     this._price = price;
+    this._offers = offers;
   }
 
   getTemplate() {
@@ -17,15 +22,15 @@ export default class TripPoint extends AbstractComponent {
           <div class="event__type">
             <img class="event__type-icon" width="42" height="42" src="img/icons/${this._type}.png" alt="Event type icon">
           </div>
-          <h3 class="event__title">${this._city}</h3>
+          <h3 class="event__title">${getFirstCapital(this._type)} ${TRANSFER_TYPES.includes(getFirstCapital(this._type)) ? `to` : `in`} ${this._city}</h3>
 
           <div class="event__schedule">
             <p class="event__time">
-              <time class="event__start-time" datetime="${moment(this._dateFrom).toISOString()}">${moment(this._dateFrom).format(`HH:mm`)}</time>
+              <time class="event__start-time" datetime="${moment(this._timeStart).toISOString()}">${moment(this._timeStart).format(`HH:mm`)}</time>
               &mdash;
-              <time class="event__end-time" datetime="2019-03-18T11:00">${this._dateTo}</time>
+              <time class="event__end-time" datetime="${moment(this._timeStart + this._duration).toISOString()}">${moment(this._timeStart + this._duration).format(`HH:mm`)}</time>
             </p>
-            <p class="event__duration">${1}H ${2}M</p>
+            <p class="event__duration">${getFormattedDuration(this._duration)}</p>
           </div>
 
           <p class="event__price">
@@ -34,11 +39,12 @@ export default class TripPoint extends AbstractComponent {
 
           <h4 class="visually-hidden">Offers:</h4>
           <ul class="event__selected-offers">
+            ${this._offers.filter((it) => it.accepted).map((it) => `
             <li class="event__offer">
-              <span class="event__offer-title">Order Uber</span>
+              <span class="event__offer-title">${it.title}</span>
               &plus;
-              &euro;&nbsp;<span class="event__offer-price">20</span>
-            </li>
+              &euro;&nbsp;<span class="event__offer-price">${it.price}</span>
+            </li>`).join(``)}
           </ul>
 
           <button class="event__rollup-btn" type="button">
